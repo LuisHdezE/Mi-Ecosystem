@@ -1,0 +1,25 @@
+# Mi Ecosystem — Version Catalog
+# Versions match the known-working combination validated by KMP-Zero-Cost-Lab.
+# Do NOT update versions simply because a newer release exists.
+
+[versions]
+agp = "9.1.1"
+kotlin = "2.4.20"
+androidCompileSdk = "37"
+androidMinSdk = "24"
+androidTargetSdk = "36"
+androidxActivity = "1.13.0"
+material3 = "1.4.0"
+composeBom = "2026.08.00"
+
+[libraries]
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidxActivity" }
+androidx-compose-material3 = { module = "androidx.compose.material3:material3", version.ref = "material3" }
+androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
+
+[plugins]
+androidApplication = { id = "com.android.application", version.ref = "agp" }
+androidMultiplatformLibrary = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
+composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }

@@ -1,0 +1,39 @@
+# Gradle
+.gradle/
+**/build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Kotlin
+.kotlin/
+konan/
+
+# IntelliJ / Android Studio
+.idea/
+*.iml
+
+# Local properties (contains SDK paths, never commit)
+local.properties
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Xcode
+*.xcuserstate
+xcuserdata/
+*.xcworkspace/xcuserdata/
+
+# Build outputs
+*.apk
+*.aab
+*.ipa
+*.dSYM.zip
+
+# Reference lab (local clone, not part of project)
+.ref-lab/
+
+# Tools
+.tools/
