@@ -26,6 +26,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import uy.eliasworks.miecosystem.EcosystemInfo
+import uy.eliasworks.miecosystem.identity.BootstrapIdentity
+import uy.eliasworks.miecosystem.android.theme.toMaterialColorScheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,12 +43,7 @@ class MainActivity : ComponentActivity() {
 private fun BootstrapApp() {
     val context = LocalContext.current
     val darkTheme = isSystemInDarkTheme()
-    val colorScheme = when {
-        Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && darkTheme -> dynamicDarkColorScheme(context)
-        Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> dynamicLightColorScheme(context)
-        darkTheme -> darkColorScheme()
-        else -> lightColorScheme()
-    }
+    val colorScheme = BootstrapIdentity.theme.colors.toMaterialColorScheme()
 
     MaterialTheme(colorScheme = colorScheme) {
         BootstrapScreen()
@@ -66,25 +63,29 @@ private fun BootstrapScreen() {
             verticalArrangement = Arrangement.Center,
         ) {
             Text(
-                text = "Mi Ecosystem",
+                text = BootstrapIdentity.product.displayName,
                 style = MaterialTheme.typography.headlineLarge,
                 fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary,
             )
             Spacer(Modifier.height(4.dp))
             Text(
                 text = "Technical Bootstrap",
                 style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = MaterialTheme.colorScheme.secondary,
             )
             Spacer(Modifier.height(24.dp))
             Text(
-                text = "Shared core: OK",
+                text = "Theme: ${BootstrapIdentity.theme.id}",
                 style = MaterialTheme.typography.bodyLarge,
             )
             Text(
-                text = info.platformMessage(),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                text = "Theme version: ${BootstrapIdentity.theme.version}",
+                style = MaterialTheme.typography.bodyLarge,
+            )
+            Text(
+                text = "Shared identity: OK",
+                style = MaterialTheme.typography.bodyLarge,
             )
             Spacer(Modifier.height(8.dp))
             Text(
