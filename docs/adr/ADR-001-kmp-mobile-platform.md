@@ -1,37 +1,43 @@
-# ADR-001 — Kotlin Multiplatform as the shared mobile foundation
+# ADR-001 — KMP shared brain with native platform presentation
 
 - Status: Proposed
 - Date: 2026-09-29
+- Technical reference: [KMP-Zero-Cost-Lab](https://github.com/LuisHdezE/KMP-Zero-Cost-Lab)
 
 ## Context
 
-Mi Ecosystem evolved from an Android-only concept into a reusable mobile platform targeting Android and iOS.
+Mi Ecosystem targets Android and iOS and needs shared business semantics without erasing platform-native user experience.
 
-The platform needs to share business logic and reusable capabilities without sacrificing platform-specific implementations when Android and iOS differ materially.
+KMP-Zero-Cost-Lab has already validated shared KMP domain/controller/persistence, Room/SQLite on both targets, native Compose on Android, native SwiftUI on iOS, physical-device CRUD/persistence, and CI build paths.
 
 ## Decision
 
-Use Kotlin Multiplatform as the foundation for shared domain and application logic.
+Use Kotlin Multiplatform for the shared brain: domain, application logic, repository contracts, reusable business rules and persistence where validated.
 
-Use Compose Multiplatform where it provides clear reuse value, while allowing native/platform-specific UI or adapters whenever that produces a better technical result.
+Use native presentation by default:
+- Android: Jetpack Compose + Material 3.
+- iOS: SwiftUI.
 
-Platform-specific concerns remain behind explicit abstractions.
+Use target source sets and explicit adapters for platform-specific composition and APIs.
+
+Compose Multiplatform UI is not part of this baseline. Adopting it later requires evidence and a separate ADR.
+
+KMP-Zero-Cost-Lab is a reference laboratory, not a runtime/build dependency of Mi Ecosystem.
 
 ## Consequences
 
-### Positive
+- Business behavior has one authoritative implementation.
+- Android and iOS preserve native UX conventions.
+- Proven lab patterns reduce speculative architecture.
+- Platform presentation code will intentionally differ.
+- Interop and Apple build/release tooling remain explicit engineering concerns.
 
-- One shared business core for Android and iOS.
-- Reusable feature modules can evolve independently.
-- Less duplication of domain rules and application logic.
-- Product variants can share logic while keeping distinct visual identities.
+## Evidence policy
 
-### Trade-offs
+A capability proven in the lab may be adopted as a reference pattern, but Mi Ecosystem still needs its own automated verification.
 
-- KMP introduces additional build and interoperability complexity.
-- Not every API or UI concern should be shared.
-- iOS integration and release tooling require explicit validation in CI and on Apple tooling.
+Known lab gaps, including real Room schema migration with data preservation on both platforms, must not be described as solved until Mi Ecosystem has evidence.
 
 ## Guardrail
 
-KMP is a reuse mechanism, not a mandate to share every line of code.
+Share behavior because it must be identical, not merely because it can compile on both platforms.
