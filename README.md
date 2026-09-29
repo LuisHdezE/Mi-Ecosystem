@@ -30,13 +30,13 @@ The first delivery phase will validate the architecture through one functional p
 
 ## Current implementation status
 
-**KMP-001 — Technical Bootstrap** (in progress)
+**KMP-002 — Product Identity & Design Tokens** (in progress)
 
 This repository currently contains:
 
-- ✅ Shared KMP module (`shared/`) with `commonMain`, `commonTest`, `androidMain`, `iosMain`
-- ✅ Android app (`androidApp/`) with Jetpack Compose + Material 3
-- ✅ iOS app (`iosApp/`) with SwiftUI consuming the KMP shared framework
+- ✅ Shared semantic identity and themes (`shared/`)
+- ✅ Android app (`androidApp/`) mapping semantic tokens to Material 3
+- ✅ iOS app (`iosApp/`) mapping semantic tokens to SwiftUI
 - ✅ Common tests for shared code
 - ✅ CI workflows for Android and iOS builds
 - ✅ Centralized version catalog (`gradle/libs.versions.toml`)
@@ -71,4 +71,4 @@ The following identifiers are used for technical compilation purposes and **requ
 
 ## Repository status
 
-KMP-001 is the technical bootstrap checkpoint. It demonstrates that the repository can host shared KMP logic consumed by native Android and iOS applications with reproducible builds and CI validation.
+KMP-002 is the product identity checkpoint. It demonstrates that the repository can host shared visual semantic logic consumed by native Android (Material 3) and iOS (SwiftUI) applications.
