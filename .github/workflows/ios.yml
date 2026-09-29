@@ -1,0 +1,83 @@
+name: iOS
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  ios-build:
+    runs-on: macos-15
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.3.1'
+
+      - name: Environment
+        run: |
+          uname -a
+          xcodebuild -version
+          java -version
+          gradle --version
+          xcodebuild -list -project iosApp/iosApp.xcodeproj
+
+      - name: Shared iOS simulator tests
+        run: gradle :shared:iosSimulatorArm64Test --stacktrace
+
+      - name: Compile shared framework for physical iPhone (arm64)
+        run: gradle :shared:linkDebugFrameworkIosArm64 --stacktrace
+
+      - name: Build unsigned iPhone app
+        run: |
+          set -euo pipefail
+          xcodebuild \
+            -project iosApp/iosApp.xcodeproj \
+            -scheme iosApp \
+            -configuration Debug \
+            -sdk iphoneos \
+            -derivedDataPath "$PWD/build/ios" \
+            IPHONEOS_DEPLOYMENT_TARGET=16.0 \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            DEVELOPMENT_TEAM="" \
+            build
+
+      - name: Validate app bundle
+        run: |
+          set -euo pipefail
+          APP="$PWD/build/ios/Build/Products/Debug-iphoneos/MiEcosystem.app"
+          test -d "$APP"
+          test -f "$APP/Info.plist"
+          plutil -p "$APP/Info.plist"
+
+      - name: Package unsigned IPA
+        run: |
+          set -euo pipefail
+          APP="$PWD/build/ios/Build/Products/Debug-iphoneos/MiEcosystem.app"
+          rm -rf Payload MiEcosystem-unsigned.ipa
+          mkdir Payload
+          cp -R "$APP" Payload/
+          ditto -c -k --sequesterRsrc --keepParent Payload MiEcosystem-unsigned.ipa
+          test -s MiEcosystem-unsigned.ipa
+
+      - name: Upload unsigned IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: mi-ecosystem-ios-unsigned-ipa
+          path: MiEcosystem-unsigned.ipa
+          if-no-files-found: error
+          retention-days: 7
