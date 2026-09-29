@@ -33,6 +33,14 @@ Phase 1 is not complete unless all of the following are true:
 7. Persistence and platform integrations are accessed through abstractions suitable for KMP.
 8. Automated tests protect critical domain rules.
 9. CI validates the supported build/test matrix.
+10. Android presentation is validated with Jetpack Compose / Material 3.
+11. iOS presentation is validated with SwiftUI.
+12. At least one persisted-data upgrade path is tested before Phase 1 exit; Room schema migration must preserve existing data on both platforms.
+13. Evidence distinguishes capabilities inherited as reference from KMP-Zero-Cost-Lab from capabilities independently verified in Mi Ecosystem.
+
+## Technical reference
+
+KMP-Zero-Cost-Lab is the reference laboratory for KMP feasibility and zero-cost build experiments. Mi Ecosystem must not import it as a production dependency. Patterns are promoted only with explicit evidence and project-local verification.
 
 ## Reuse proof
 
