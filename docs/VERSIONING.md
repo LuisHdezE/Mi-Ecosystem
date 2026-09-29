@@ -56,6 +56,21 @@ Each product supplies configurable tokens such as:
 
 A product theme may change without copying business logic or shared UI components.
 
+## Semantic Theme Versioning
+
+The shared module defines the **Semantic Theme** (e.g., `primary`, `background`) and its version. This represents the visual contract.
+
+This architecture explicitly separates three distinct areas:
+```text
+Shared semantic product identity
+        ≠
+Android UI implementation
+        ≠
+iOS UI implementation
+```
+
+A semantic theme version identifies the abstract visual contract. A change in the internal implementation of Android (Jetpack Compose) or iOS (SwiftUI) components that does not modify this shared contract does not necessarily obligate a change in the semantic theme version.
+
 ## Compatibility rule
 
 Module upgrades must preserve explicit contracts or declare a breaking change. Semantic Versioning is the intended baseline for reusable modules once implementation begins.
