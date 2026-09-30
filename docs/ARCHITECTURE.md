@@ -36,6 +36,7 @@ Platform-specific APIs remain behind explicit adapters.
 mi-ecosystem/
 ├── shared/
 │   ├── core/
+│   │   └── money/
 │   ├── database/
 │   └── business/
 ├── features/
