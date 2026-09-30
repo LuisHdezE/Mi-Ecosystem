@@ -20,7 +20,7 @@ mi-customers      1.1.0
 mi-sales          1.3.0
 mi-payments       1.2.0
 mi-design-system  1.4.0
-workshop          1.0.0
+retail            1.0.0
 ```
 
 ## Product composition
@@ -28,15 +28,15 @@ workshop          1.0.0
 A product release records the versions of the modules that compose it.
 
 ```text
-MiTaller 1.0.0
+MiVenta 1.0.0
 Core          1.0.0
-Customers     1.1.0
-Inventory     1.0.2
-Sales         1.3.0
+Inventory     1.1.0
+Sales         1.0.2
+Consignments  1.3.0
 Payments      1.2.0
-Workshop      1.0.0
+Retail        1.0.0
 DesignSystem  1.4.0
-Theme         MiTaller
+Theme         MiVenta
 ```
 
 ## Visual identity

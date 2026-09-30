@@ -1,22 +1,20 @@
-# Phase 1 — MiTaller Validation
+# Phase 1 — MiVenta Validation
 
 ## Objective
 
-Deliver one functional product, MiTaller, while proving that Mi Ecosystem is a reusable Android+iOS platform rather than a single application codebase.
+Deliver one functional product, MiVenta, while proving that Mi Ecosystem is a reusable Android+iOS platform rather than a single application codebase.
 
 ## Functional scope
 
 The first functional slice should cover:
 
-- customers
-- devices
-- repair orders
-- diagnosis
-- estimates / budgets
-- repair status tracking
+- inventory
+- purchases
+- sales
+- consignments
+- shifts
 - basic payments and expenses
 - search
-- repair history
 
 The product is offline-first in this phase.
 
@@ -25,10 +23,10 @@ The product is offline-first in this phase.
 Phase 1 is not complete unless all of the following are true:
 
 1. Shared domain and business logic execute on Android and iOS.
-2. Generic business concepts remain outside the workshop vertical.
-3. MiTaller-specific logic is isolated in the workshop vertical.
+2. Generic business concepts remain outside the MiVenta vertical.
+3. MiVenta-specific logic is isolated in the product vertical.
 4. Visual identity is configurable through the shared design-system/theme model.
-5. No reusable capability is duplicated inside the MiTaller application layer.
+5. No reusable capability is duplicated inside the MiVenta application layer.
 6. Shared modules have explicit version boundaries.
 7. Persistence and platform integrations are accessed through abstractions suitable for KMP.
 8. Automated tests protect critical domain rules.
@@ -61,4 +59,4 @@ The proof must compile without copying the shared modules.
 
 ## Exit gate
 
-Phase 1 can be declared complete only when MiTaller is functionally usable and the reuse proof demonstrates both cross-product reuse and Android/iOS portability of the intended shared logic.
+Phase 1 can be declared complete only when MiVenta is functionally usable and the reuse proof demonstrates both cross-product reuse and Android/iOS portability of the intended shared logic.

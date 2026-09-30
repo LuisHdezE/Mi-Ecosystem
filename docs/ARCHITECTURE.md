@@ -59,4 +59,4 @@ Workshop owns only workshop-specific concepts such as RepairOrder, Device, Diagn
 
 ## 6. Phase 1 product
 
-MiTaller is the first product. Phase 1 must prove reuse across products and portability of the intended shared logic across Android and iOS.
+MiVenta is the first product. Phase 1 must prove reuse across products and portability of the intended shared logic across Android and iOS.

@@ -26,7 +26,7 @@ Compose Multiplatform UI is not part of this baseline. See [ADR-001](docs/adr/AD
 
 ## Phase 1
 
-The first delivery phase will validate the architecture through one functional product: **MiTaller**. See [PHASE-1.md](docs/PHASE-1.md) for acceptance criteria.
+The first delivery phase will validate the architecture through one functional product: **MiVenta**. See [PHASE-1.md](docs/PHASE-1.md) for acceptance criteria.
 
 ## Current implementation status
 
@@ -43,8 +43,8 @@ This repository currently contains:
 
 **Not yet implemented:**
 
-- MiTaller business logic
-- Domain entities (Customers, Repair Orders, Payments, etc.)
+- MiVenta business logic
+- Domain entities (Inventory, Shifts, Sales, Consignments, etc.)
 - Room / local persistence
 - Navigation
 - Design system
