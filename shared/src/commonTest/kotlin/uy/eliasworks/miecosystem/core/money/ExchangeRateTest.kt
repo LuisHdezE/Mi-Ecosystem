@@ -28,7 +28,12 @@ class ExchangeRateTest {
     @Test
     fun testSameCurrencyRejected() {
         assertFailsWith<IllegalArgumentException> {
-            ExchangeRate(Currency.USD, Currency.USD, 1L)
+            ExchangeRate(Currency("USD", 2), Currency("USD", 2), 1L)
+        }
+        
+        // Even with different scale, same code must be rejected
+        assertFailsWith<IllegalArgumentException> {
+            ExchangeRate(Currency("USD", 2), Currency("USD", 3), 10L)
         }
     }
 
@@ -105,6 +110,40 @@ class ExchangeRateTest {
         assertFailsWith<ArithmeticException> {
             rate.convert(maxMoney)
         }
+    }
+    
+    @Test
+    fun testIntermediateOverflowReducedSafely() {
+        // If money = 100,000,000 and rate is 500,000,000 / 100,000,000
+        // naive multiplication would be 100M * 500M = 5 * 10^16 (fits in long, but imagine larger)
+        
+        // Let's use a huge amount near max long that would definitely overflow if multiplied naively
+        // We want (amount * num) / den to fit in long.
+        // amount = 5,000,000,000,000,000,000 (5 quintillion)
+        // den = 2,000,000,000
+        // num = 3,000,000,000
+        // amount * num = 1.5 * 10^28 (overflows Long massively)
+        // With reduction: g = gcd(amount, den) = 2,000,000,000
+        // reducedAmount = 2.5 * 10^9
+        // reducedDen = 1
+        // (reducedAmount * num) / 1 = 7.5 * 10^18 (fits in Long!)
+        
+        val hugeAmount = 5_000_000_000_000_000_000L
+        val rate = ExchangeRate(Currency("USD", 2), Currency("CUP", 2), 3_000_000_000L, 2_000_000_000L)
+        
+        val money = Money(hugeAmount, Currency("USD", 2))
+        
+        // Should NOT throw ArithmeticException because intermediate overflow is reduced safely.
+        val converted = rate.convert(money)
+        assertEquals(7_500_000_000_000_000_000L, converted.amountMinorUnits)
+    }
+
+    @Test
+    fun testZeroConversion() {
+        val rate = ExchangeRate(Currency.USD, Currency.CUP, 50L)
+        val zero = Money(0L, Currency.USD)
+        val converted = rate.convert(zero)
+        assertEquals(0L, converted.amountMinorUnits)
     }
 
     @Test

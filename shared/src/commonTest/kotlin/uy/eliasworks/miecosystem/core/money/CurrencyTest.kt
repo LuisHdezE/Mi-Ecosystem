@@ -3,6 +3,7 @@ package uy.eliasworks.miecosystem.core.money
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+import kotlin.test.assertNotEquals
 
 class CurrencyTest {
 
@@ -73,5 +74,17 @@ class CurrencyTest {
         assertFailsWith<IllegalArgumentException> {
             Currency("USD", 10) // > 9
         }
+    }
+
+    @Test
+    fun testCurrencyEqualityIncludesScale() {
+        val usd2 = Currency("USD", 2)
+        val usd2b = Currency("USD", 2)
+        val usd3 = Currency("USD", 3)
+
+        assertEquals(usd2, usd2b)
+        assertEquals(usd2.hashCode(), usd2b.hashCode())
+        
+        assertNotEquals(usd2, usd3)
     }
 }

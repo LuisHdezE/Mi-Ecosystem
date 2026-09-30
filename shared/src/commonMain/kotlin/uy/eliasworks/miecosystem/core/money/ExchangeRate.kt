@@ -8,7 +8,7 @@ class ExchangeRate private constructor(
 ) {
     companion object {
         operator fun invoke(fromCurrency: Currency, toCurrency: Currency, numerator: Long, denominator: Long = 1L): ExchangeRate {
-            require(fromCurrency != toCurrency) { "Source and target currencies must differ" }
+            require(fromCurrency.code != toCurrency.code) { "ExchangeRate source and target must have different normalized currency codes" }
             require(numerator > 0L && denominator > 0L) { "Rate must be strictly positive" }
             val g = gcd(numerator, denominator)
             return ExchangeRate(fromCurrency, toCurrency, numerator / g, denominator / g)
@@ -16,6 +16,10 @@ class ExchangeRate private constructor(
 
         private tailrec fun gcd(a: Long, b: Long): Long {
             return if (b == 0L) a else gcd(b, a % b)
+        }
+        
+        private tailrec fun gcdULong(a: ULong, b: ULong): ULong {
+            return if (b == 0uL) a else gcdULong(b, a % b)
         }
     }
 
@@ -45,13 +49,37 @@ class ExchangeRate private constructor(
         val totalDen = if (scaleDiff < 0) safeMultiply(rateDenominator, pow10(-scaleDiff)) else rateDenominator
 
         val g = gcd(totalNum, totalDen)
-        val finalNum = totalNum / g
-        val finalDen = totalDen / g
+        val finalNum = (totalNum / g).toULong()
+        val finalDen = (totalDen / g).toULong()
 
-        val numerator = safeMultiply(money.amountMinorUnits, finalNum)
-        val result = divideHalfUp(numerator, finalDen)
+        val isNegative = money.amountMinorUnits < 0L
+        val amountAbs = if (money.amountMinorUnits == Long.MIN_VALUE) 9223372036854775808uL else kotlin.math.abs(money.amountMinorUnits).toULong()
+
+        val amountGcd = gcdULong(amountAbs, finalDen)
+        val reducedAmount = amountAbs / amountGcd
+        val reducedDen = finalDen / amountGcd
+
+        val q = reducedAmount / reducedDen
+        val r = reducedAmount % reducedDen
+
+        val term1 = safeMultiplyULong(q, finalNum)
         
-        return Money(result, toCurrency)
+        val rNum = safeMultiplyULong(r, finalNum)
+        val quotient2 = rNum / reducedDen
+        val remainder = rNum % reducedDen
+        
+        val roundedQuotient2 = if (remainder >= reducedDen - remainder) quotient2 + 1uL else quotient2
+        
+        val totalAbs = safeAddULong(term1, roundedQuotient2)
+
+        if (isNegative) {
+            if (totalAbs > 9223372036854775808uL) throw ArithmeticException("Long overflow during conversion")
+            val result = if (totalAbs == 9223372036854775808uL) Long.MIN_VALUE else -(totalAbs.toLong())
+            return Money(result, toCurrency)
+        } else {
+            if (totalAbs > Long.MAX_VALUE.toULong()) throw ArithmeticException("Long overflow during conversion")
+            return Money(totalAbs.toLong(), toCurrency)
+        }
     }
 
     private fun safeMultiply(a: Long, b: Long): Long {
@@ -62,26 +90,19 @@ class ExchangeRate private constructor(
         return result
     }
 
-    private fun divideHalfUp(num: Long, den: Long): Long {
-        if (den == 0L) throw ArithmeticException("Division by zero")
-        
-        val isNegative = (num < 0L) xor (den < 0L)
-        
-        val uNum = if (num == Long.MIN_VALUE) 9223372036854775808uL else kotlin.math.abs(num).toULong()
-        val uDen = if (den == Long.MIN_VALUE) 9223372036854775808uL else kotlin.math.abs(den).toULong()
-        
-        val quotient = uNum / uDen
-        val remainder = uNum % uDen
-        
-        val roundedQuotient = if (remainder >= uDen - remainder) quotient + 1uL else quotient
-        
-        if (isNegative) {
-            if (roundedQuotient > 9223372036854775808uL) throw ArithmeticException("Overflow during rounding")
-            return if (roundedQuotient == 9223372036854775808uL) Long.MIN_VALUE else -(roundedQuotient.toLong())
-        } else {
-            if (roundedQuotient > Long.MAX_VALUE.toULong()) throw ArithmeticException("Overflow during rounding")
-            return roundedQuotient.toLong()
+    private fun safeMultiplyULong(a: ULong, b: ULong): ULong {
+        if (a == 0uL || b == 0uL) return 0uL
+        val result = a * b
+        if (result / a != b) {
+            throw ArithmeticException("Long overflow during conversion multiplication")
         }
+        return result
+    }
+
+    private fun safeAddULong(a: ULong, b: ULong): ULong {
+        val result = a + b
+        if (result < a) throw ArithmeticException("Long overflow during conversion addition")
+        return result
     }
 
     private fun pow10(n: Int): Long {

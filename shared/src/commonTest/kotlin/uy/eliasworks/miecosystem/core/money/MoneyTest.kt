@@ -45,19 +45,29 @@ class MoneyTest {
 
     @Test
     fun testCrossCurrencyAdditionRejected() {
-        val usd = Money(1000L, Currency.USD)
-        val cup = Money(500L, Currency.CUP)
+        val usd = Money(1000L, Currency("USD", 2))
+        val cup = Money(500L, Currency("CUP", 2))
         assertFailsWith<IllegalArgumentException> {
             usd + cup
+        }
+        
+        val usd3 = Money(500L, Currency("USD", 3))
+        assertFailsWith<IllegalArgumentException> {
+            usd + usd3
         }
     }
 
     @Test
     fun testCrossCurrencySubtractionRejected() {
-        val usd = Money(1000L, Currency.USD)
-        val cup = Money(500L, Currency.CUP)
+        val usd = Money(1000L, Currency("USD", 2))
+        val cup = Money(500L, Currency("CUP", 2))
         assertFailsWith<IllegalArgumentException> {
             usd - cup
+        }
+        
+        val usd3 = Money(500L, Currency("USD", 3))
+        assertFailsWith<IllegalArgumentException> {
+            usd - usd3
         }
     }
 

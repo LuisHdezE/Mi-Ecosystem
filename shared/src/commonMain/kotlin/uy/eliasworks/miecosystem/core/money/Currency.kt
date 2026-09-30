@@ -6,10 +6,14 @@ class Currency private constructor(val code: String, val minorUnits: Int) {
         if (this === other) return true
         if (other == null || this::class != other::class) return false
         other as Currency
-        return code == other.code
+        return code == other.code && minorUnits == other.minorUnits
     }
 
-    override fun hashCode(): Int = code.hashCode()
+    override fun hashCode(): Int {
+        var result = code.hashCode()
+        result = 31 * result + minorUnits
+        return result
+    }
 
     override fun toString(): String = "Currency(code='$code', minorUnits=$minorUnits)"
     companion object {
