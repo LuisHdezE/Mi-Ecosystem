@@ -8,6 +8,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
+import uy.eliasworks.miecosystem.persistence.probe.room.RoomPersistenceProbeRepository
 import java.io.File
 
 class PersistenceProbeDiskTest {
@@ -34,26 +35,26 @@ class PersistenceProbeDiskTest {
     @Test
     fun diskPersistenceAfterReopen_Android() = runBlocking {
         var db = getAppDatabase(context)
-        var dao = db.persistenceProbeDao()
+        var repository = RoomPersistenceProbeRepository(db.persistenceProbeDao())
 
-        dao.upsert(uy.eliasworks.miecosystem.persistence.probe.PersistenceProbeEntity(id = 1L, value = "Test Persistence"))
-        assertEquals("Test Persistence", dao.getById(1L)?.value)
+        repository.save(id = 1L, value = "Test Persistence")
+        assertEquals("Test Persistence", repository.get(1L)?.value)
         
-        var all = dao.getAll()
+        var all = repository.getAll()
         assertEquals(1, all.size)
 
         db.close()
 
         // Reopen same database file
         db = getAppDatabase(context)
-        dao = db.persistenceProbeDao()
+        repository = RoomPersistenceProbeRepository(db.persistenceProbeDao())
 
         // Read again and prove it persisted on disk
-        val recovered = dao.getById(1L)
+        val recovered = repository.get(1L)
         assertEquals("Test Persistence", recovered?.value)
         
-        dao.deleteById(1L)
-        assertNull(dao.getById(1L))
+        repository.delete(1L)
+        assertNull(repository.get(1L))
         
         db.close()
     }

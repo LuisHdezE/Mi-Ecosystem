@@ -24,7 +24,7 @@ We establish the KMP persistence foundation using the stack validated by `KMP-Ze
 2. **Platform Database Builders:**
    Room instantiation is platform-specific due to filesystem differences.
    - **Android:** Uses `Room.databaseBuilder` with `Context.getDatabasePath()`.
-   - **iOS:** Uses `Room.databaseBuilder` pointing to a persistent path in `NSHomeDirectory()`.
+   - **iOS:** Uses `Room.databaseBuilder` pointing to a persistent path in `NSHomeDirectory() + "/mi-ecosystem.db"`. (Verified as correct for KMP/Room sandbox storage on iOS).
    Android-specific or iOS-specific types do not leak into `commonMain`.
 
 3. **Schema Export:**
@@ -35,7 +35,10 @@ We establish the KMP persistence foundation using the stack validated by `KMP-Ze
    Destructive migrations are **NOT** our production strategy. Future KMP-004 stages will demonstrate `v1 -> v2` migrations and prove preservation of existing data.
 
 5. **Reference-Lab Evidence vs Mi Ecosystem Evidence:**
-   The laboratory proved the infrastructure works conceptually, but Mi Ecosystem maintains its own separate evidence. Our automated tests verify that the database correctly persists data to disk across reopenings.
+   The laboratory proved the infrastructure works conceptually, but Mi Ecosystem maintains its own separate evidence. Mi Ecosystem includes an Android instrumented persistence test designed to verify disk persistence across database reopenings. Runtime execution evidence is tracked separately from compilation (IMPLEMENTED vs COMPILED vs EXECUTED vs PHYSICAL DEVICE VERIFIED).
+
+6. **Repository Boundary:**
+   `PersistenceProbeRepository` serves as a neutral contract. Room implementation details are strictly isolated behind `RoomPersistenceProbeRepository`, ensuring no platform or framework types (e.g. Dao or Room Entity) leak to the domain logic.
 
 ## Consequences
 

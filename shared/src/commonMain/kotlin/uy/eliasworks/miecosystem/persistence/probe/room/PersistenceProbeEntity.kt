@@ -1,4 +1,4 @@
-package uy.eliasworks.miecosystem.persistence.probe
+package uy.eliasworks.miecosystem.persistence.probe.room
 
 import androidx.room3.Entity
 import androidx.room3.PrimaryKey

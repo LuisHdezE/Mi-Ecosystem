@@ -4,8 +4,8 @@ import androidx.room3.ConstructedBy
 import androidx.room3.Database
 import androidx.room3.RoomDatabase
 import androidx.room3.RoomDatabaseConstructor
-import uy.eliasworks.miecosystem.persistence.probe.PersistenceProbeDao
-import uy.eliasworks.miecosystem.persistence.probe.PersistenceProbeEntity
+import uy.eliasworks.miecosystem.persistence.probe.room.PersistenceProbeDao
+import uy.eliasworks.miecosystem.persistence.probe.room.PersistenceProbeEntity
 
 @Database(entities = [PersistenceProbeEntity::class], version = 1, exportSchema = true)
 @ConstructedBy(AppDatabaseConstructor::class)
