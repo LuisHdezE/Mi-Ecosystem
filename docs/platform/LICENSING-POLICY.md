@@ -19,7 +19,7 @@ Activation Code
       ↓
 Local Verification
       ↓
-Activated
+Activated (PRO Entitlement Granted)
 ```
 
 ## Cryptographic Security
@@ -29,7 +29,7 @@ A simple SHA hash is insufficient for authorization. The architecture employs an
 - **PRIVATE KEY:** Exists exclusively in the external License Generator. The client app never contains the private key.
 - **PUBLIC KEY:** Embedded within the MiVenta app to verify the signature.
 
-The generator signs a license payload, and the app verifies it using the public key.
+The generator signs a license payload, and the app verifies it using the public key. The signed license acts as a cryptographic source of entitlement (e.g., granting PRO), rather than representing the global application state itself.
 *(Note: A specific cryptographic algorithm will be chosen in a future ADR).*
 
 ## Installation Identity

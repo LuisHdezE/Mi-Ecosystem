@@ -4,11 +4,26 @@ MiVenta is the first functional product built on top of the Mi Ecosystem platfor
 
 ## Commercial Model
 
-MiVenta follows a **Free / Activated** model.
-The free installation will allow a configurable amount of commercial operations without requiring a license (the exact limit is defined by a `TrialPolicy`).
-When the trial limit is reached, the creation of new commercial operations will be restricted until an activation license is provided.
+MiVenta's product policy follows a commercial model progressing from a **FREE** entitlement to a **PRO** entitlement via offline signed activation:
 
-**Data Ownership:** The end of the trial period MUST NOT block the user from accessing their own data. Even without an active license, users can read existing information, view historical records, and perform backup/export actions.
+```text
+FREE
+  ↓
+offline signed activation
+  ↓
+PRO
+```
+
+The FREE entitlement will allow a configurable amount of commercial operations without requiring activation (the exact quantitative limit is defined by a `UsagePolicy`).
+When the FREE usage limit is reached, the creation of new commercial operations will be restricted until PRO entitlement is achieved via activation.
+
+**Data Ownership:** Commercial entitlement MUST NOT determine ownership or accessibility of existing user data. After a FREE usage limit is reached, the user must retain at minimum:
+- READ EXISTING DATA
+- VIEW HISTORY
+- BACKUP
+- EXPORT
+
+Operations subject to commercial entitlement may be restricted, but Backup/Export must never be held hostage by entitlement state.
 
 ## Identity and Customization
 
