@@ -37,7 +37,7 @@ mi-ecosystem/
 ├── shared/
 │   ├── core/
 │   │   └── money/
-│   ├── database/
+│   ├── persistence/
 │   └── business/
 ├── features/
 │   ├── customers/
