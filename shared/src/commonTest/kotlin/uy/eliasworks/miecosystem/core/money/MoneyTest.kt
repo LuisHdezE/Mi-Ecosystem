@@ -62,6 +62,30 @@ class MoneyTest {
     }
 
     @Test
+    fun testAdditionOverflowRejected() {
+        val max = Money(Long.MAX_VALUE, Currency.USD)
+        val one = Money(1L, Currency.USD)
+        assertFailsWith<ArithmeticException> {
+            max + one
+        }
+    }
+
+    @Test
+    fun testSubtractionOverflowRejected() {
+        val min = Money(Long.MIN_VALUE, Currency.USD)
+        val one = Money(1L, Currency.USD)
+        assertFailsWith<ArithmeticException> {
+            min - one
+        }
+        
+        val max = Money(Long.MAX_VALUE, Currency.USD)
+        val negOne = Money(-1L, Currency.USD)
+        assertFailsWith<ArithmeticException> {
+            max - negOne
+        }
+    }
+
+    @Test
     fun testEqualityIncludesCurrency() {
         val usd = Money(1000L, Currency.USD)
         val cup = Money(1000L, Currency.CUP)

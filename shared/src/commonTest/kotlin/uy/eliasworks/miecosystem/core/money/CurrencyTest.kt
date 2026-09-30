@@ -8,7 +8,7 @@ class CurrencyTest {
 
     @Test
     fun testValidCurrency() {
-        val usd = Currency("USD")
+        val usd = Currency("USD", 2)
         assertEquals("USD", usd.code)
         assertEquals(2, usd.minorUnits)
 
@@ -18,37 +18,60 @@ class CurrencyTest {
 
     @Test
     fun testLowercaseNormalizedToUppercase() {
-        val eur = Currency("eur")
+        val eur = Currency("eur", 2)
         assertEquals("EUR", eur.code)
     }
 
     @Test
     fun testBlankRejected() {
         assertFailsWith<IllegalArgumentException> {
-            Currency("")
+            Currency("", 2)
         }
         assertFailsWith<IllegalArgumentException> {
-            Currency("   ")
+            Currency("   ", 2)
         }
     }
 
     @Test
     fun testInvalidLengthsRejected() {
         assertFailsWith<IllegalArgumentException> {
-            Currency("US")
+            Currency("US", 2)
         }
         assertFailsWith<IllegalArgumentException> {
-            Currency("USDD")
+            Currency("USDD", 2)
         }
     }
 
     @Test
     fun testNumericOrSymbolRejected() {
         assertFailsWith<IllegalArgumentException> {
-            Currency("12A")
+            Currency("12A", 2)
         }
         assertFailsWith<IllegalArgumentException> {
-            Currency("\$US")
+            Currency("\$US", 2)
+        }
+    }
+
+    @Test
+    fun testUnicodeRejected() {
+        assertFailsWith<IllegalArgumentException> {
+            Currency("ÉUR", 2)
+        }
+        assertFailsWith<IllegalArgumentException> {
+            Currency("１２A", 2)
+        }
+    }
+
+    @Test
+    fun testScaleBounds() {
+        val crypto = Currency("BTC", 8)
+        assertEquals(8, crypto.minorUnits)
+
+        assertFailsWith<IllegalArgumentException> {
+            Currency("USD", -1)
+        }
+        assertFailsWith<IllegalArgumentException> {
+            Currency("USD", 10) // > 9
         }
     }
 }
