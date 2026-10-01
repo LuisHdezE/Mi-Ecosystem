@@ -47,6 +47,8 @@ mi-ecosystem/
 │   ├── payments/
 │   └── expenses/
 ├── verticals/
+│   ├── miventa/
+│   │   └── products/
 │   └── workshop/
 ├── androidApp/
 └── iosApp/
