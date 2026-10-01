@@ -24,7 +24,7 @@ We establish the KMP persistence foundation using the stack validated by `KMP-Ze
 2. **Platform Database Builders:**
    Room instantiation is platform-specific due to filesystem differences.
    - **Android:** Uses `Room.databaseBuilder` with `Context.getDatabasePath()`.
-   - **iOS:** Uses `Room.databaseBuilder` pointing to a persistent path in `NSHomeDirectory() + "/mi-ecosystem.db"`. (Verified as correct for KMP/Room sandbox storage on iOS).
+   - **iOS:** Uses `Room.databaseBuilder` pointing to the platform application-support directory (`Library/Application Support/mi-ecosystem.db` inside the application sandbox), resolved via `NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, …)`. The directory is created if it does not exist; failure to resolve or create it is treated as a deterministic initialization error.
    Android-specific or iOS-specific types do not leak into `commonMain`.
 
 3. **Schema Export:**
