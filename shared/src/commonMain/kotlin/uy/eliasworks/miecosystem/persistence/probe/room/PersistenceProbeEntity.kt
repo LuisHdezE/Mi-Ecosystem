@@ -7,5 +7,7 @@ import androidx.room3.PrimaryKey
 data class PersistenceProbeEntity(
     @PrimaryKey
     val id: Long,
-    val value: String
+    val value: String,
+    @androidx.room3.ColumnInfo(name = "created_at_epoch_ms")
+    val createdAtEpochMs: Long
 )

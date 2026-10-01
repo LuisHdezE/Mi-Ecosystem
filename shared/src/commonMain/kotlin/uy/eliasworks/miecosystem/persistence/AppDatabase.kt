@@ -7,7 +7,7 @@ import androidx.room3.RoomDatabaseConstructor
 import uy.eliasworks.miecosystem.persistence.probe.room.PersistenceProbeDao
 import uy.eliasworks.miecosystem.persistence.probe.room.PersistenceProbeEntity
 
-@Database(entities = [PersistenceProbeEntity::class], version = 1, exportSchema = true)
+@Database(entities = [PersistenceProbeEntity::class], version = 2, exportSchema = true)
 @ConstructedBy(AppDatabaseConstructor::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun persistenceProbeDao(): PersistenceProbeDao
