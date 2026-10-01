@@ -37,7 +37,7 @@ mi-ecosystem/
 ├── shared/
 │   ├── core/
 │   │   └── money/
-│   ├── persistence/
+│   ├── persistence/ (database, schemas, migrations, Room adapters/repositories)
 │   └── business/
 ├── features/
 │   ├── customers/
